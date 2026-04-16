@@ -1,0 +1,127 @@
+[
+  {
+    "subject": "Physics",
+    "topic": "Newton's Laws of Motion",
+    "text": "Newton's First Law states that an object at rest stays at rest, and an object in motion stays in motion at the same speed and direction, unless acted upon by an external force. This is also called the law of inertia. For example, a book on a table stays there until you push it. A ball rolling on the ground eventually stops because of friction, which is the external force."
+  },
+  {
+    "subject": "Physics",
+    "topic": "Newton's Laws of Motion",
+    "text": "Newton's Second Law says that force equals mass times acceleration, written as F = ma. This means the heavier an object is, the more force you need to accelerate it. If you push a shopping cart and a truck with the same force, the cart moves faster because it has less mass."
+  },
+  {
+    "subject": "Physics",
+    "topic": "Newton's Laws of Motion",
+    "text": "Newton's Third Law states that for every action, there is an equal and opposite reaction. When you push against a wall, the wall pushes back on you with the same force. When a rocket launches, it pushes exhaust gases downward, and the gases push the rocket upward."
+  },
+  {
+    "subject": "Physics",
+    "topic": "Gravity",
+    "text": "Gravity is a force that pulls objects toward each other. On Earth, gravity gives everything a downward acceleration of about 9.8 meters per second squared. This means if you drop a ball, it falls faster and faster — after 1 second it's moving at 9.8 m/s, after 2 seconds at 19.6 m/s. The Moon has weaker gravity, about one-sixth of Earth's, so you could jump six times higher there."
+  },
+  {
+    "subject": "Physics",
+    "topic": "Light and Optics",
+    "text": "Light travels at about 300,000 kilometers per second in a vacuum, which is the fastest speed possible. Light can behave as both a wave and a particle (called a photon). When light passes through a prism, it splits into the colors of the rainbow because different wavelengths bend at different angles. This is called dispersion. Red light has the longest wavelength and violet has the shortest."
+  },
+  {
+    "subject": "Chemistry",
+    "topic": "Atoms and Elements",
+    "text": "An atom is the smallest unit of matter that retains the properties of an element. Atoms have three main parts: protons (positive charge) and neutrons (no charge) in the nucleus, and electrons (negative charge) orbiting around it. The number of protons defines the element — hydrogen has 1 proton, carbon has 6, and oxygen has 8."
+  },
+  {
+    "subject": "Chemistry",
+    "topic": "Periodic Table",
+    "text": "The Periodic Table organizes all known elements by their atomic number (number of protons). Elements in the same column (group) have similar chemical properties. For example, Group 1 elements like lithium, sodium, and potassium are all reactive metals that react vigorously with water. Noble gases in Group 18 like helium and neon are very stable and rarely react with anything."
+  },
+  {
+    "subject": "Chemistry",
+    "topic": "Chemical Bonding",
+    "text": "Chemical bonds form when atoms share or transfer electrons. In ionic bonding, one atom gives electrons to another — like sodium giving an electron to chlorine to form table salt (NaCl). In covalent bonding, atoms share electrons — like two hydrogen atoms sharing electrons with oxygen to form water (H2O). Covalent bonds are common in organic molecules."
+  },
+  {
+    "subject": "Chemistry",
+    "topic": "Acids and Bases",
+    "text": "Acids are substances that release hydrogen ions (H+) in water and have a pH below 7. Lemon juice and vinegar are common acids. Bases release hydroxide ions (OH-) and have a pH above 7. Soap and baking soda are common bases. When an acid and base react, they neutralize each other and form water plus a salt. This is called a neutralization reaction."
+  },
+  {
+    "subject": "Mathematics",
+    "topic": "Pythagorean Theorem",
+    "text": "The Pythagorean Theorem states that in a right triangle, the square of the hypotenuse equals the sum of the squares of the other two sides: a squared plus b squared equals c squared. For example, if one side is 3 and another is 4, the hypotenuse is 5, because 9 plus 16 equals 25, and the square root of 25 is 5. This only works for right triangles — triangles with one 90-degree angle."
+  },
+  {
+    "subject": "Mathematics",
+    "topic": "Quadratic Equations",
+    "text": "A quadratic equation has the form ax squared plus bx plus c equals zero. You can solve it using the quadratic formula: x equals negative b plus or minus the square root of b squared minus 4ac, all divided by 2a. The part under the square root, b squared minus 4ac, is called the discriminant. If it's positive, there are two real solutions. If zero, one solution. If negative, no real solutions."
+  },
+  {
+    "subject": "Mathematics",
+    "topic": "Algebra Basics",
+    "text": "Algebra uses letters (variables) to represent unknown numbers. An equation like 2x + 3 = 11 means you need to find what number x is. To solve it, subtract 3 from both sides to get 2x = 8, then divide both sides by 2 to get x = 4. The key rule is: whatever you do to one side of the equation, you must do to the other side to keep it balanced."
+  },
+  {
+    "subject": "Mathematics",
+    "topic": "Trigonometry",
+    "text": "Trigonometry deals with the relationships between angles and sides of triangles. The three main functions are sine, cosine, and tangent. In a right triangle: sine of an angle equals the opposite side divided by the hypotenuse, cosine equals the adjacent side divided by the hypotenuse, and tangent equals the opposite divided by the adjacent. Remember SOH-CAH-TOA."
+  },
+  {
+    "subject": "Biology",
+    "topic": "Cell Structure",
+    "text": "Cells are the basic building blocks of all living things. There are two main types: prokaryotic cells (like bacteria) which have no nucleus, and eukaryotic cells (like human cells) which have a nucleus containing DNA. Key parts of a eukaryotic cell include the nucleus (control center), mitochondria (powerhouse that produces energy), cell membrane (outer boundary), and ribosomes (protein factories)."
+  },
+  {
+    "subject": "Biology",
+    "topic": "Photosynthesis",
+    "text": "Photosynthesis is how plants make food using sunlight. The equation is: carbon dioxide plus water plus sunlight produces glucose and oxygen. It happens mainly in the leaves, in structures called chloroplasts that contain chlorophyll (the green pigment). Plants absorb CO2 from air through tiny pores called stomata and water from the soil through roots. The glucose gives the plant energy and the oxygen is released into the air."
+  },
+  {
+    "subject": "Biology",
+    "topic": "DNA and Genetics",
+    "text": "DNA (deoxyribonucleic acid) is the molecule that carries genetic instructions in all living things. It has a double helix structure — like a twisted ladder. The rungs are made of four bases: adenine (A) pairs with thymine (T), and guanine (G) pairs with cytosine (C). A gene is a section of DNA that codes for a specific protein. Humans have about 20,000 to 25,000 genes spread across 23 pairs of chromosomes."
+  },
+  {
+    "subject": "Biology",
+    "topic": "Human Digestive System",
+    "text": "Digestion breaks food into nutrients your body can absorb. It starts in the mouth where teeth crush food and saliva begins breaking down starches. Food travels down the esophagus to the stomach, where acid and enzymes break down proteins. In the small intestine, nutrients are absorbed into the blood. The large intestine absorbs water, and waste is eliminated. The liver and pancreas help by producing bile and digestive enzymes."
+  },
+  {
+    "subject": "History",
+    "topic": "Indian Independence Movement",
+    "text": "India gained independence from British rule on August 15, 1947, after a long freedom struggle. Key leaders included Mahatma Gandhi, who led non-violent resistance through movements like the Salt March (1930) and Quit India Movement (1942). Jawaharlal Nehru became the first Prime Minister. The independence also led to the partition of India and Pakistan, which caused massive displacement and communal violence."
+  },
+  {
+    "subject": "History",
+    "topic": "World War II",
+    "text": "World War II (1939-1945) was the deadliest conflict in history, involving most of the world's nations split into the Allies (UK, USA, USSR, France, China) and the Axis (Germany, Italy, Japan). It began when Nazi Germany invaded Poland. Key events include the Holocaust, the bombing of Pearl Harbor which brought the USA into the war, D-Day (the Allied invasion of Normandy), and the atomic bombings of Hiroshima and Nagasaki that ended the war."
+  },
+  {
+    "subject": "Geography",
+    "topic": "Solar System",
+    "text": "Our solar system has eight planets orbiting the Sun. In order from the Sun: Mercury, Venus, Earth, Mars (the rocky inner planets), Jupiter, Saturn, Uranus, and Neptune (the gas and ice giants). Jupiter is the largest planet. Earth is the only known planet with liquid water on its surface and life. The asteroid belt lies between Mars and Jupiter. Pluto was reclassified as a dwarf planet in 2006."
+  },
+  {
+    "subject": "Geography",
+    "topic": "Plate Tectonics",
+    "text": "Earth's surface is divided into large plates that float on the semi-liquid mantle below. These tectonic plates move slowly — about 2 to 10 centimeters per year. When plates collide, they can form mountains (like the Himalayas, formed by the Indian and Eurasian plates colliding). When plates pull apart, magma rises to form new crust. Earthquakes and volcanoes commonly occur at plate boundaries."
+  },
+  {
+    "subject": "Computer Science",
+    "topic": "How the Internet Works",
+    "text": "The internet is a global network of computers connected together. When you visit a website, your computer sends a request through your internet provider to a DNS server, which translates the website name (like google.com) into an IP address (a number). The request travels to the web server hosting that site, which sends back the webpage data in small pieces called packets. Your browser reassembles these packets into the page you see."
+  },
+  {
+    "subject": "Computer Science",
+    "topic": "Programming Basics",
+    "text": "Programming is giving instructions to a computer in a language it understands. Key concepts include: variables (containers that store data), loops (repeating actions — like 'print hello 10 times'), conditionals (if-then decisions — like 'if age is over 18, allow access'), and functions (reusable blocks of code). Popular beginner languages include Python (simple syntax, great for learning) and JavaScript (used for web development)."
+  },
+  {
+    "subject": "English",
+    "topic": "Parts of Speech",
+    "text": "There are eight main parts of speech in English. Nouns name things (dog, city). Pronouns replace nouns (he, she, it). Verbs show action or state (run, is). Adjectives describe nouns (big, blue). Adverbs modify verbs, adjectives, or other adverbs (quickly, very). Prepositions show relationships (in, on, at). Conjunctions connect words or clauses (and, but, or). Interjections express emotion (wow, ouch)."
+  },
+  {
+    "subject": "Environmental Science",
+    "topic": "Climate Change",
+    "text": "Climate change refers to long-term shifts in global temperatures and weather patterns. Human activities, especially burning fossil fuels like coal, oil, and gas, release greenhouse gases (mainly CO2) that trap heat in the atmosphere. This causes global warming, leading to melting ice caps, rising sea levels, more extreme weather events, and threats to ecosystems. Reducing emissions, using renewable energy, and planting trees are key solutions."
+  }
+]
