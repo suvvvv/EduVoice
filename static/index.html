@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduVoice — Voice-First Learning Assistant</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a1a;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .bg-glow {
+            position: fixed;
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15), transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 60px 24px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 48px;
+            margin-bottom: 8px;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        h1 span {
+            background: linear-gradient(135deg, #818cf8, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tagline {
+            font-size: 1.15rem;
+            color: #9ca3af;
+            margin-bottom: 48px;
+            line-height: 1.6;
+        }
+
+        /* Call button */
+        .call-btn {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
+            position: relative;
+        }
+
+        .call-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(99, 102, 241, 0.4);
+        }
+
+        .call-btn.active {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            box-shadow: 0 0 40px rgba(239, 68, 68, 0.4);
+            animation: pulse-ring 1.5s ease-in-out infinite;
+        }
+
+        .call-btn .mic-icon {
+            font-size: 36px;
+        }
+
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        .status {
+            margin-top: 20px;
+            font-size: 0.95rem;
+            color: #6b7280;
+            min-height: 24px;
+        }
+
+        .status.connected {
+            color: #34d399;
+        }
+
+        .status.error {
+            color: #f87171;
+        }
+
+        /* Features */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 56px;
+        }
+
+        .feature {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 24px 16px;
+        }
+
+        .feature .icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .feature h3 {
+            font-size: 0.9rem;
+            color: #c4b5fd;
+            margin-bottom: 6px;
+        }
+
+        .feature p {
+            font-size: 0.8rem;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        /* Subjects strip */
+        .subjects {
+            margin-top: 48px;
+        }
+
+        .subjects h3 {
+            font-size: 0.85rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tag {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            color: #a5b4fc;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .footer {
+            margin-top: 56px;
+            font-size: 0.8rem;
+            color: #374151;
+        }
+
+        /* Transcript */
+        .transcript {
+            margin-top: 40px;
+            text-align: left;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .transcript.visible {
+            display: block;
+        }
+
+        .transcript h3 {
+            font-size: 0.85rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .transcript-entry {
+            padding: 10px 14px;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .transcript-entry.user {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            color: #c4b5fd;
+            margin-left: 40px;
+        }
+
+        .transcript-entry.assistant {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: #d1d5db;
+            margin-right: 40px;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .features { grid-template-columns: 1fr; }
+            .call-btn { width: 120px; height: 120px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+
+    <div class="container">
+        <div class="logo">🎓</div>
+        <h1>Edu<span>Voice</span></h1>
+        <p class="tagline">
+            Your voice-first learning assistant. Ask anything about science, math,
+            history, or any subject — just speak and learn.
+        </p>
+
+        <button class="call-btn" id="callBtn" onclick="toggleCall()">
+            <span class="mic-icon">🎙️</span>
+            <span id="btnLabel">Talk</span>
+        </button>
+        <p class="status" id="status">Click to start a conversation</p>
+
+        <div class="transcript" id="transcript">
+            <h3>Conversation</h3>
+            <div id="transcriptEntries"></div>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <div class="icon">🔍</div>
+                <h3>RAG-Powered</h3>
+                <p>Retrieves relevant knowledge before answering for accurate responses</p>
+            </div>
+            <div class="feature">
+                <div class="icon">🗣️</div>
+                <h3>Multilingual</h3>
+                <p>Speak in Hindi, English, or other languages — it responds in kind</p>
+            </div>
+            <div class="feature">
+                <div class="icon">🧠</div>
+                <h3>Context-Aware</h3>
+                <p>Remembers your conversation and builds on previous questions</p>
+            </div>
+        </div>
+
+        <div class="subjects">
+            <h3>Subjects Covered</h3>
+            <div class="tags">
+                <span class="tag">Physics</span>
+                <span class="tag">Chemistry</span>
+                <span class="tag">Mathematics</span>
+                <span class="tag">Biology</span>
+                <span class="tag">History</span>
+                <span class="tag">Geography</span>
+                <span class="tag">Computer Science</span>
+                <span class="tag">English</span>
+                <span class="tag">Environmental Science</span>
+            </div>
+        </div>
+
+        <p class="footer">Built for the Voice AI Hackathon — Accessibility & Societal Impact</p>
+    </div>
+
+    <script type="module">
+        import VapiModule from "https://esm.sh/@vapi-ai/web@latest";
+
+        const VAPI_PUBLIC_KEY = "{{VAPI_PUBLIC_KEY}}";
+        const VAPI_ASSISTANT_ID = "{{VAPI_ASSISTANT_ID}}";
+
+        let vapi = null;
+        let callActive = false;
+
+        function initVapi() {
+            if (vapi) return;
+            vapi = new VapiModule(VAPI_PUBLIC_KEY);
+
+            vapi.on("call-start", () => {
+                setStatus("Connected — start speaking!", "connected");
+            });
+
+            vapi.on("call-end", () => {
+                callActive = false;
+                updateButton();
+                setStatus("Call ended. Click to start again.");
+            });
+
+            vapi.on("message", (msg) => {
+                if (msg.type === "transcript" && msg.transcriptType === "final") {
+                    addTranscript(msg.role, msg.transcript);
+                }
+            });
+
+            vapi.on("error", (err) => {
+                console.error("Vapi error:", err);
+                callActive = false;
+                updateButton();
+                setStatus("Something went wrong. Try again.", "error");
+            });
+        }
+
+        async function toggleCall() {
+            if (!vapi) initVapi();
+
+            if (callActive) {
+                vapi.stop();
+                callActive = false;
+                updateButton();
+                setStatus("Ending call...");
+            } else {
+                callActive = true;
+                updateButton();
+                setStatus("Connecting...");
+                document.getElementById("transcript").classList.add("visible");
+                try {
+                    await vapi.start(VAPI_ASSISTANT_ID);
+                } catch (e) {
+                    console.error("Failed to start call:", e);
+                    callActive = false;
+                    updateButton();
+                    setStatus("Failed to connect. Check your keys.", "error");
+                }
+            }
+        }
+
+        function updateButton() {
+            const btn = document.getElementById("callBtn");
+            const label = document.getElementById("btnLabel");
+            if (callActive) {
+                btn.classList.add("active");
+                label.textContent = "End";
+            } else {
+                btn.classList.remove("active");
+                label.textContent = "Talk";
+            }
+        }
+
+        function setStatus(text, type) {
+            const el = document.getElementById("status");
+            el.textContent = text;
+            el.className = "status" + (type ? " " + type : "");
+        }
+
+        function addTranscript(role, text) {
+            const container = document.getElementById("transcriptEntries");
+            const div = document.createElement("div");
+            div.className = "transcript-entry " + (role === "user" ? "user" : "assistant");
+            div.textContent = text;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Expose to onclick handler
+        window.toggleCall = toggleCall;
+    </script>
+</body>
+</html>

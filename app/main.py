@@ -4,19 +4,34 @@ FastAPI server that handles Vapi webhook events for a voice-based
 educational RAG agent powered by Qdrant + OpenAI.
 """
 
+import os
+
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 
 from app.config import HOST, PORT
 from app.rag import generate_answer
 
 app = FastAPI(title="EduVoice", version="1.0.0")
 
+STATIC_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "static")
+
 # In-memory conversation store (keyed by call ID)
 conversations: dict[str, list[dict]] = {}
 
 
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
+async def index():
+    """Serve the landing page with Vapi keys injected."""
+    html_path = os.path.join(STATIC_DIR, "index.html")
+    with open(html_path) as f:
+        html = f.read()
+    html = html.replace("{{VAPI_PUBLIC_KEY}}", os.getenv("VAPI_PUBLIC_KEY", ""))
+    html = html.replace("{{VAPI_ASSISTANT_ID}}", os.getenv("VAPI_ASSISTANT_ID", ""))
+    return HTMLResponse(content=html)
+
+
+@app.get("/health")
 async def health():
     return {"status": "ok", "service": "EduVoice"}
 
