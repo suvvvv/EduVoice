@@ -27,7 +27,7 @@ def create_assistant(server_url: str):
         "name": "EduVoice",
         "model": {
             "provider": "custom-llm",
-            "url": f"{server_url}/vapi/chat",
+            "url": f"{server_url}/vapi",
             "model": "eduvoice-rag",
         },
         "voice": {

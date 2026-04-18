@@ -1,7 +1,11 @@
 """RAG pipeline: embed query -> search Qdrant -> generate answer with LLM."""
 
+import logging
+
 from openai import OpenAI
 from qdrant_client import QdrantClient
+
+log = logging.getLogger("eduvoice")
 
 from app.config import (
     OPENAI_API_KEY,
@@ -58,6 +62,7 @@ def get_embedding(text: str) -> list[float]:
 
 def search_knowledge(query: str, top_k: int = 3) -> list[dict]:
     """Search Qdrant for relevant knowledge chunks."""
+    log.info(f"🔍 Qdrant search: '{query}' (top_k={top_k})")
     query_vector = get_embedding(query)
 
     try:
@@ -67,7 +72,7 @@ def search_knowledge(query: str, top_k: int = 3) -> list[dict]:
             limit=top_k,
             with_payload=True,
         )
-        return [
+        hits = [
             {
                 "text": point.payload.get("text", ""),
                 "subject": point.payload.get("subject", ""),
@@ -76,8 +81,11 @@ def search_knowledge(query: str, top_k: int = 3) -> list[dict]:
             }
             for point in results.points
         ]
+        for h in hits:
+            log.info(f"   📚 [{h['score']:.3f}] {h['subject']} / {h['topic']}")
+        return hits
     except Exception as e:
-        print(f"Qdrant search error: {e}")
+        log.error(f"❌ Qdrant search error: {e}")
         return []
 
 

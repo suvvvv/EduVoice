@@ -5,14 +5,36 @@ educational RAG agent powered by Qdrant + OpenAI.
 """
 
 import os
+import json
+import time
+import logging
 
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse
 
 from app.config import HOST, PORT
 from app.rag import generate_answer
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)-5s | %(message)s",
+    datefmt="%H:%M:%S",
+)
+log = logging.getLogger("eduvoice")
+
 app = FastAPI(title="EduVoice", version="1.0.0")
+
+
+@app.middleware("http")
+async def add_cross_origin_isolation_headers(request: Request, call_next):
+    """Enable SharedArrayBuffer for Vapi's Krisp noise-suppression WASM worker."""
+    response = await call_next(request)
+    if request.url.path == "/" or request.url.path.startswith("/static"):
+        response.headers["Cross-Origin-Opener-Policy"] = "same-origin"
+        response.headers["Cross-Origin-Embedder-Policy"] = "credentialless"
+        response.headers["Cross-Origin-Resource-Policy"] = "cross-origin"
+    return response
+
 
 STATIC_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "static")
 
@@ -51,7 +73,25 @@ async def vapi_webhook(request: Request):
     message = body.get("message", {})
     msg_type = message.get("type", "")
 
+    if msg_type == "transcript":
+        role = message.get("role", "?")
+        transcript = message.get("transcript", "")
+        ttype = message.get("transcriptType", "")
+        if ttype == "final":
+            if role == "user":
+                log.info(f"🎤 STT (user said): {transcript}")
+            else:
+                log.info(f"🔊 TTS (bot said): {transcript}")
+        return JSONResponse(content={"status": "ok"})
+
+    if msg_type == "speech-update":
+        status = message.get("status", "")
+        role = message.get("role", "")
+        log.info(f"🗣️  Speech {status} ({role})")
+        return JSONResponse(content={"status": "ok"})
+
     if msg_type == "assistant-request":
+        log.info("🤖 Assistant config requested")
         return _handle_assistant_request()
 
     if msg_type == "function-call":
@@ -63,7 +103,21 @@ async def vapi_webhook(request: Request):
 
     if msg_type == "end-of-call-report":
         call_id = message.get("call", {}).get("id", "")
+        ended_reason = message.get("endedReason", "unknown")
+        log.info(f"📴 Call ended: {call_id} | reason: {ended_reason}")
+        summary = message.get("summary")
+        if summary:
+            log.info(f"   Summary: {summary}")
         conversations.pop(call_id, None)
+        return JSONResponse(content={"status": "ok"})
+
+    if msg_type == "status-update":
+        status = message.get("status", "")
+        ended_reason = message.get("endedReason", "")
+        if ended_reason:
+            log.warning(f"📞 Call status: {status} | ended reason: {ended_reason}")
+        else:
+            log.info(f"📞 Call status: {status}")
         return JSONResponse(content={"status": "ok"})
 
     return JSONResponse(content={"status": "ok"})
@@ -94,7 +148,7 @@ def _handle_assistant_request():
     )
 
 
-@app.post("/vapi/chat")
+@app.post("/vapi/chat/completions")
 async def vapi_chat(request: Request):
     """Custom LLM endpoint for Vapi.
 
@@ -104,8 +158,8 @@ async def vapi_chat(request: Request):
     body = await request.json()
     messages = body.get("messages", [])
     call_id = body.get("call", {}).get("id", "unknown")
+    stream = body.get("stream", False)
 
-    # Extract the latest user message
     user_message = ""
     for msg in reversed(messages):
         if msg.get("role") == "user":
@@ -113,20 +167,51 @@ async def vapi_chat(request: Request):
             break
 
     if not user_message:
-        return _chat_response("I didn't catch that. Could you repeat your question?")
+        log.warning("⚠️  No user message in chat request")
+        answer = "I didn't catch that. Could you repeat your question?"
+    else:
+        log.info(f"❓ User query: {user_message}")
+        history = conversations.get(call_id, [])
+        answer = generate_answer(user_message, conversation_history=history)
+        log.info(f"💬 Bot answer: {answer}")
+        history.append({"role": "user", "content": user_message})
+        history.append({"role": "assistant", "content": answer})
+        conversations[call_id] = history
 
-    # Get conversation history for this call
-    history = conversations.get(call_id, [])
-
-    # Generate RAG answer
-    answer = generate_answer(user_message, conversation_history=history)
-
-    # Update conversation history
-    history.append({"role": "user", "content": user_message})
-    history.append({"role": "assistant", "content": answer})
-    conversations[call_id] = history
-
+    if stream:
+        return StreamingResponse(
+            _stream_chat_chunks(answer),
+            media_type="text/event-stream",
+        )
     return _chat_response(answer)
+
+
+def _stream_chat_chunks(text: str):
+    """Yield OpenAI-compatible SSE chunks for streaming."""
+    chunk_id = f"chatcmpl-{int(time.time() * 1000)}"
+    created = int(time.time())
+    base = {
+        "id": chunk_id,
+        "object": "chat.completion.chunk",
+        "created": created,
+        "model": "eduvoice-rag",
+    }
+
+    # Opening chunk with role
+    first = {**base, "choices": [{"index": 0, "delta": {"role": "assistant"}, "finish_reason": None}]}
+    yield f"data: {json.dumps(first)}\n\n"
+
+    # Stream text in word-sized chunks
+    words = text.split(" ")
+    for i, word in enumerate(words):
+        content = word if i == 0 else " " + word
+        chunk = {**base, "choices": [{"index": 0, "delta": {"content": content}, "finish_reason": None}]}
+        yield f"data: {json.dumps(chunk)}\n\n"
+
+    # Closing chunk
+    done = {**base, "choices": [{"index": 0, "delta": {}, "finish_reason": "stop"}]}
+    yield f"data: {json.dumps(done)}\n\n"
+    yield "data: [DONE]\n\n"
 
 
 async def _handle_function_call(message: dict):
